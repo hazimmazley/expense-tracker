@@ -6,14 +6,16 @@ const form = document.getElementById('form');
 const text = document.getElementById('text');
 const amount = document.getElementById('amount');
 
-const dummyTransactions = [
-  { id: 1, text: 'Flower', amount: -20 },
-  { id: 2, text: 'Salary', amount: 300 },
-  { id: 3, text: 'Book', amount: -10 },
-  { id: 4, text: 'Camera', amount: 150 }
-];
+// const dummyTransactions = [
+//   { id: 1, text: 'Flower', amount: -20 },
+//   { id: 2, text: 'Salary', amount: 300 },
+//   { id: 3, text: 'Book', amount: -10 },
+//   { id: 4, text: 'Camera', amount: 150 }
+// ];
 
-let transactions = dummyTransactions;
+const localStorageTrasaction = JSON.parse(localStorage.getItem('transactions'))
+
+let transactions = localStorage.getItem('transactions') !== null? localStorageTrasaction : [];
 
 function addTransaction(e) {
     e.preventDefault();
@@ -32,6 +34,8 @@ function addTransaction(e) {
         addTransactionDOM(transaction);
 
         updateValues();
+
+        updateLocalStorage();
 
         text.value = '';
         amount.value = '';
@@ -86,7 +90,12 @@ function updateValues() {
 function removeTransaction(id) {
     transactions = transactions.filter(transaction => transaction.id !== id);
 
+    updateLocalStorage();
     init();
+}
+
+function updateLocalStorage() {
+    localStorage.setItem('transactions', JSON.stringify(transactions))
 }
 
 // Init app
